@@ -27,24 +27,29 @@ module.exports = {
 
         // Guardado essa instancia (new contactModel) em uma constante
         const contact = new contactModel({ //Feito uma nova instancia para contactModel 
-            name: request.payload.name,
-            number: request.payload.number,
-            description: request.payload.description, //Montado este objeto que é uma instancia de contact model com as propriedades (name, number e description). E também atribuindo os valores nessas propriedades que vem da requisição através do payload
+            petName: request.payload.petName,
+            petSpecies: request.payload.petSpecies,
+            petGender: request.payload.petGender,
+            petBirthday: request.payload.petBirthday,
+            petBreed: request.payload.petBreed,
+            petOwner: request.payload.petOwner,
+            petAddress: request.payload.petAddress,
+            petOwnerNumber: request.payload.petOwnerNumber,
             userId: userId
         })
 
-        // console.log(!contact.name) //O operador ! questiona se o objeto contact.name é undefined e exibe no console
+        // console.log(contact.petName) //O operador ! questiona se o objeto contact.name é undefined e exibe no console
 
-        if (!contact.name) //Verifica se o objeto contact.name é undefined 
-            return h.response({message:'Name is required.'}).code(409) //Se cair dentro desse if irá devolver o status code 409. Se cair nesse if o código é finalizado
+        if (!contact.petName) //Verifica se o objeto contact.name é undefined 
+            return h.response({message:'Pet name is required.'}).code(409) //Se cair dentro desse if irá devolver o status code 409. Se cair nesse if o código é finalizado
 
-        if (!contact.number)
+        if (!contact.petOwnerNumber)
             return h.response({message:'Number is required.'}).code(409)//Além de retornar o statuscode ele também devolve uma mensagem que é verificada no teste `post.test.js`
 
-        if (!contact.description)
-            return h.response({message:'Description is required.'}).code(409)
+        if (!contact.petOwner)
+            return h.response({message:'Pet owner is required.'}).code(409)
 
-        const dup = await contactModel.findOne({number: contact.number, userId: userId}).exec(); //Essa função busca um registro no banco
+        const dup = await contactModel.findOne({petOwnerNumber: contact.petOwnerNumber, userId: userId}).exec(); //Essa função busca um registro no banco
 
         if (dup)
         return h.response({error: 'Duplicated number.'}).code(409) //Retorna mensagem se o numero de telefone que está tentando cadastrar é o mesmo de um já existente
